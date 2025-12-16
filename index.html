@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dhasenfratz.com</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page">
+        <header class="site-header">
+            <div class="site-header__title">
+                <h1>dhasenfratz.com</h1>
+                <p class="site-header__tagline">
+                    Your automated weather view, produced by Banana Gemini.
+                </p>
+            </div>
+        </header>
+
+        <main class="page-main">
+            <section class="image-card">
+                <div class="frame">
+                    <div id="loader" class="loader">
+                        Connecting to the cache…
+                    </div>
+                    <img
+                        id="daily-image"
+                        src=""
+                        alt="Generated daily content"
+                        class="hidden"
+                    >
+                </div>
+
+                <p id="status-text" class="image-card__status">
+                    Warming up for today’s image…
+                </p>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p class="site-footer__text">
+                (c) 2026, for more context (and a bit of nostalgia), you can always hop over to the real 
+                <a href="https://dhasenfratz.com" target="_blank" rel="noopener noreferrer">
+                    dhasenfratz.com
+                </a>.
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
