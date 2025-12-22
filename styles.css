@@ -162,3 +162,42 @@ body {
     }
 }
 
+.timelapse {
+  margin-top: 14px;
+  width: 100%;
+}
+
+.timelapse__summary {
+  cursor: pointer;
+  user-select: none;
+
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+
+  border-radius: 12px;
+}
+
+.timelapse[open] .timelapse__summary {
+  opacity: 1;
+}
+
+.timelapse__body {
+  margin-top: 10px;
+}
+
+.timelapse__video {
+  width: 100%;
+  border-radius: 14px;
+  display: block;
+
+  /* keeps it visually "part of the page" */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: white;
+}
+
+/* Optional: reduce default triangle size / spacing a bit */
+.timelapse__summary::marker {
+  font-size: 0.9em;
+}
+

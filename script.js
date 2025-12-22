@@ -28,6 +28,10 @@ const loader = document.getElementById("loader");
 const statusText = document.getElementById("status-text");
 const imageCard = document.querySelector(".image-card");
 
+const toggleBtn = document.getElementById("toggle-timelapse");
+const timelapseEl = document.getElementById("timelapse");
+const timelapseVideo = document.getElementById("timelapse-video");
+
 // Helper Functions
 function displayImage(url) {
     if (!imgElement) return;
@@ -88,6 +92,35 @@ async function fetchCachedImage() {
     }
 }
 
+function setupTimelapseToggle() {
+
+  if (toggleBtn && timelapseEl) {
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = timelapseEl.classList.contains("hidden");
+
+      if (isHidden) {
+        timelapseEl.classList.remove("hidden");
+        toggleBtn.setAttribute("aria-expanded", "true");
+        toggleBtn.textContent = "Hide timelapse";
+
+        // Lazy-load the video only when the user asks for it
+        if (timelapseVideo) {
+          timelapseVideo.load();
+        }
+      } else {
+        // Pause when hiding, so it doesn't keep playing
+        if (timelapseVideo) timelapseVideo.pause();
+
+        timelapseEl.classList.add("hidden");
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleBtn.textContent = "View timelapse";
+      }
+    });
+  }
+
+}
+
 // Run the function when the script loads
 fetchCachedImage();
+setupTimelapseToggle();
 

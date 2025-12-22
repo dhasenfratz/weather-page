@@ -34,6 +34,30 @@
                 <p id="status-text" class="image-card__status">
                     Warming up for today’s image…
                 </p>
+
+                <details class="timelapse">
+                    <summary class="timelapse__summary">See the last days as a timelapse</summary>
+
+                    <div class="timelapse__body">
+                        <video
+                            id="timelapse-video"
+                            class="timelapse__video"
+                            muted
+                            loop
+                            playsinline
+                            controls
+                        >
+                            <source
+                                src="https://storage.googleapis.com/the-weather-storage2/weather_timelapse.mp4"
+                                type="video/mp4"
+                            />
+                            Your browser does not support embedded video.
+                            <a href="https://storage.googleapis.com/the-weather-storage2/weather_timelapse.mp4" target="_blank" rel="noopener noreferrer">
+                                Open the timelapse
+                            </a>
+                        </video>
+                    </div>
+                </details>
             </section>
         </main>
 
