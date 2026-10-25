@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>dhasenfratz.com</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2026-10-25">
 </head>
 <body>
     <div class="page">
@@ -12,13 +15,19 @@
             <div class="site-header__title">
                 <h1>dhasenfratz.com</h1>
                 <p class="site-header__tagline">
-                    Your automated weather view.
+                    Zurich on this day, in another year.
                 </p>
             </div>
+            <p id="weather-text" class="site-header__weather"></p>
         </header>
 
         <main class="page-main">
             <section class="image-card">
+                <div id="era-row" class="era-row hidden">
+                    <p class="era-row__label">Today’s dice landed on</p>
+                    <div id="era-buttons" class="era-buttons" role="group" aria-label="Choose a year"></div>
+                </div>
+
                 <div class="frame">
                     <div id="loader" class="loader">
                         Connecting to the cache…
@@ -26,55 +35,39 @@
                     <img
                         id="daily-image"
                         src=""
-                        alt="Generated daily content"
-                        class="hidden"
+                        alt=""
                     >
                 </div>
 
-                <p id="status-text" class="image-card__status">
-                    Warming up for today’s image…
+                <div class="caption">
+                    <h2 id="era-headline" class="caption__headline"></h2>
+                    <p id="status-text" class="caption__note">
+                        Warming up for today’s image…
+                    </p>
+                </div>
+
+                <p class="image-card__footnote">
+                    Same city, same weather, different centuries. New years are rolled every morning at 10am.
                 </p>
-
-                <details class="timelapse">
-                    <summary class="timelapse__summary">See the last days as a timelapse</summary>
-
-                    <div class="timelapse__body">
-                        <video
-                            id="timelapse-video"
-                            class="timelapse__video"
-                            muted
-                            loop
-                            playsinline
-                            controls
-                        >
-                            <source
-                                src="https://storage.googleapis.com/the-weather-storage2/weather_timelapse.mp4"
-                                type="video/mp4"
-                            />
-                            Your browser does not support embedded video.
-                            <a href="https://storage.googleapis.com/the-weather-storage2/weather_timelapse.mp4" target="_blank" rel="noopener noreferrer">
-                                Open the timelapse
-                            </a>
-                        </video>
-                    </div>
-                </details>
             </section>
+
+            <a class="research-link" href="https://dhasenfratz.wordpress.com" target="_blank" rel="noopener noreferrer">
+                <span class="research-link__text">
+                    <span class="research-link__title">Continue to my former research at ETH Zurich</span>
+                    <span class="research-link__sub">Air-quality sensing on Zurich’s trams, open data sets, talks</span>
+                </span>
+                <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+            </a>
         </main>
 
         <footer class="site-footer">
-            <p class="site-footer__text">
-                (c) 2025, for more context (and a bit of nostalgia), you can always hop over to 
-                <a href="https://dhasenfratz.wordpress.com" target="_blank" rel="noopener noreferrer">
-                    research.dhasenfratz.com
-                </a>.
-            </p>
+            <p class="site-footer__text">© 2026 David Hasenfratz</p>
         </footer>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2026-10-25"></script>
 </body>
 </html>
-

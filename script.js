@@ -26,35 +26,84 @@ if (typeof firebase !== "undefined") {
 const imgElement = document.getElementById("daily-image");
 const loader = document.getElementById("loader");
 const statusText = document.getElementById("status-text");
-const imageCard = document.querySelector(".image-card");
-
-const toggleBtn = document.getElementById("toggle-timelapse");
-const timelapseEl = document.getElementById("timelapse");
-const timelapseVideo = document.getElementById("timelapse-video");
+const weatherText = document.getElementById("weather-text");
+const eraRow = document.getElementById("era-row");
+const eraButtons = document.getElementById("era-buttons");
+const eraHeadline = document.getElementById("era-headline");
 
 // Helper Functions
-function displayImage(url) {
+function showImage(image) {
     if (!imgElement) return;
 
-    imgElement.src = url;
-
-    // When the image loads, fade it in and hide loader text
-    imgElement.onload = () => {
-        imgElement.classList.remove("hidden");
+    const reveal = () => {
         imgElement.classList.add("visible");
         if (loader) loader.style.display = "none";
-        if (statusText) statusText.textContent = "Today’s weather snapshot from Zurich, Switzerland.";
-        if (imageCard) imageCard.classList.add("image-card--ready");
+        if (eraHeadline) eraHeadline.textContent = image.year ? `Zurich, ${image.year}` : "";
+        if (statusText) statusText.textContent = image.note || "Today’s weather in Zurich, drawn in another year.";
     };
 
+    imgElement.alt = image.year
+        ? `Isometric miniature of Zurich in the year ${image.year}, in today’s weather`
+        : "Isometric miniature of Zurich in today’s weather";
+
+    // When the image loads, fade it in and hide loader text
+    imgElement.onload = reveal;
+    imgElement.src = image.imageUrl;
+
     // Handle case where image is already cached by the browser
-    if (imgElement.complete) {
-        imgElement.classList.remove("hidden");
-        imgElement.classList.add("visible");
-        if (loader) loader.style.display = "none";
-        if (statusText) statusText.textContent = "Today’s weather snapshot from Zurich, Switzerland.";
-        if (imageCard) imageCard.classList.add("image-card--ready");
+    if (imgElement.complete && imgElement.naturalWidth > 0) {
+        reveal();
     }
+}
+
+function setupEraButtons(images, selectedIndex) {
+    if (!eraButtons || !eraRow) return;
+
+    const buttons = images.map((image, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "era-button";
+        button.textContent = image.year;
+        button.setAttribute("aria-pressed", String(index === selectedIndex));
+        button.addEventListener("click", () => {
+            buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+            showImage(image);
+        });
+        return button;
+    });
+
+    eraButtons.replaceChildren(...buttons);
+    eraRow.classList.remove("hidden");
+
+    // Preload the other years so switching is instant
+    images.forEach((image, index) => {
+        if (index !== selectedIndex) new Image().src = image.imageUrl;
+    });
+}
+
+function displayImages(serverState) {
+    const images = (serverState.images || [])
+        .filter((image) => image && image.imageUrl)
+        .sort((a, b) => Number(a.year) - Number(b.year));
+
+    if (!images.length) {
+        // Older entries only have a single image without a year
+        showImage({ imageUrl: serverState.imageUrl });
+        return;
+    }
+
+    // Start with the image the function marked as the main one (the recent past)
+    const mainIndex = images.findIndex((image) => image.imageUrl === serverState.imageUrl);
+    const selectedIndex = mainIndex >= 0 ? mainIndex : Math.floor(images.length / 2);
+
+    setupEraButtons(images, selectedIndex);
+    showImage(images[selectedIndex]);
+}
+
+function displayWeather(serverState) {
+    const { weather, temperature } = serverState;
+    if (!weatherText || !weather || !temperature || temperature === "N/A") return;
+    weatherText.textContent = `Today in Zurich: ${weather} · ${temperature}`;
 }
 
 function updateStatus(text) {
@@ -82,45 +131,15 @@ async function fetchCachedImage() {
             return;
         }
 
-        // Success, display the cached image
-        const imageUrl = serverState.imageUrl;
-        updateStatus("Found today’s image. Loading…");
-        displayImage(imageUrl);
+        // Success, display the cached images
+        updateStatus("Found today’s images. Loading…");
+        displayWeather(serverState);
+        displayImages(serverState);
     } catch (error) {
         console.error("Failed to fetch image from Firebase:", error);
         updateStatus("Error: Could not load the image cache.");
     }
 }
 
-function setupTimelapseToggle() {
-
-  if (toggleBtn && timelapseEl) {
-    toggleBtn.addEventListener("click", () => {
-      const isHidden = timelapseEl.classList.contains("hidden");
-
-      if (isHidden) {
-        timelapseEl.classList.remove("hidden");
-        toggleBtn.setAttribute("aria-expanded", "true");
-        toggleBtn.textContent = "Hide timelapse";
-
-        // Lazy-load the video only when the user asks for it
-        if (timelapseVideo) {
-          timelapseVideo.load();
-        }
-      } else {
-        // Pause when hiding, so it doesn't keep playing
-        if (timelapseVideo) timelapseVideo.pause();
-
-        timelapseEl.classList.add("hidden");
-        toggleBtn.setAttribute("aria-expanded", "false");
-        toggleBtn.textContent = "View timelapse";
-      }
-    });
-  }
-
-}
-
 // Run the function when the script loads
 fetchCachedImage();
-setupTimelapseToggle();
-
